@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Page header -->
+    <div class="page-header page-header-light">
+        <div class="page-header-content header-elements-md-inline">
+            <div class="page-title d-flex">
+                <h4> <span class="font-weight-semibold">Profile</span></h4>
+                <a href="Dumy/index" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+            </div>
+        </div>
+    </div>
+    <!-- Page header -->
+
+    <div class="content">
+        <div class="row">
+            <div class="row col-12">
+                <div class="col-3">
+                    <div class="form-group">
+                        <h6>User ID</h6>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        123
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <a asp-controller="Dumy" asp-action="AddNewUser" class="nav-link" name="Primary" style="width:150px; float:right" id="Amendments">
+                        Reset Password
+                    </a>
+                    <a asp-controller="Dumy" asp-action="AddNewUser" class="nav-link" name="Primary" style="width:150px; float:right" id="Amendments">
+                        Edit Details
+                    </a>
+                    <a asp-controller="Dumy" asp-action="AddNewUser" class="nav-link" name="Primary" style="width:150px; float:right" id="Amendments">
+                        Deactivate
+                    </a>
+                </div>
+            </div>
+            <div class="row col-12">
+                <div class="col-3">
+                    <div class="form-group">
+                        <h6>Name</h6>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="form-group">
+                        Barry Ben
+                    </div>
+                </div>
+            </div>
+            <div class="row col-12">
+                <div class="col-3">
+                    <div class="form-group">
+                        <h6>Email ID</h6>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        BarryBen@gmail.com
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <h6>Organization</h6>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        Medilaw
+                    </div>
+                </div>
+            </div>
+            <div class="row col-12">
+                <div class="col-3">
+                    <div class="form-group">
+                        <h6>Added By</h6>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        Johan Smith
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <h6>Added On</h6>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        27/02/2020
+                    </div>
+                </div>
+            </div>
+            <div class="row col-12">
+                <div class="col-3">
+                    <div class="form-group">
+                        <h6>Notification Condition</h6>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="form-group">
+                        Active/Open  (Receive notification when ticket has been posted)
+                    </div>
+                    <div class="form-group">
+                        Update  (Receive notification when ticket has been update)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

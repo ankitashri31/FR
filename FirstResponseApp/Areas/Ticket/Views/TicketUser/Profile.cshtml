@@ -1,0 +1,180 @@
+﻿@model FirstResponseApp.Areas.Ticket.Models.UserDto
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<script src="~/js/TicketUser/Profile.js"></script>
+<!-- Page header -->
+<div class="page-header page-header-light">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4> <span class="font-weight-semibold">Profile</span></h4>
+            <a href="Dumy/index" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+        </div>
+    </div>
+</div>
+<!-- Page header -->
+
+<div class="content">
+    <div class="row">
+        <div class="col-12 text-right">
+
+            @*@Html.ActionLink("Edit Details", "MyProfile", "TicketUser", new { id = @Model.Id }, new { @class = "btn btn-primary", @title = "Edit Details" })*@
+
+
+            <a class="btn btn-primary" href='@Url.Action("MyProfile","TicketUser",new { id = @Model.Id })' title="Edit Details"><i class="icon-pencil"></i> Edit Details</a>
+
+            @*<a href="/Identity/Account/ResetPassword?Code=@Model.Id" class="nav-link btn bg-indigo-300" name="Primary" title="Change Password">
+            <i class="fas fa-key"></i>   Change Password
+        </a>*@
+            <a href='@Url.Action("ResetPassword","Account",new {area = "Identity"})' class="nav-link btn bg-indigo-300" name="Primary" title="Change Password">
+            <i class="fas fa-key"></i>   Change Password
+            </a>
+        </div>
+    </div>
+
+    <div class="attorney-content-detail">
+        <ul>
+            <li class="mr-15">
+                <div class="first"> User Name</div>
+                <div class="details">@Html.HiddenFor(m => m.Id) @Model.UserName</div>
+            </li>
+        </ul>
+    </div>
+    <div class="attorney-content-detail">
+        <ul>
+            <li class="mr-15">
+                <div class="first">
+                    <span>Name</span>
+                </div>
+                <div class="details">
+                    @Model.Name &nbsp;@Model.LastName
+                </div>
+            </li>
+        </ul>
+
+    </div>
+    <div class="attorney-content-detail">
+        <ul>
+            <li class="mr-15">
+                <div class="first">
+                    <span>Email ID</span>
+                </div>
+                <div class="details">
+                    @Model.EmailAddress
+                </div>
+            </li>
+            <li class="mr-15">
+                <div class="first">
+                    <span>Organization</span>
+                </div>
+                <div class="details">
+                    @Model.OrganisationName
+                </div>
+            </li>
+        </ul>
+
+       
+    </div>
+
+   
+    <div class="attorney-content-detail">
+        <ul>
+
+            <li class="mr-15">
+                <div class="first">
+                    <span>Added By</span>
+                </div>
+                <div class="details">
+                    @Model.CreatedBy
+                </div>
+            </li>
+            <li class="mr-15">
+                <div class="first">
+                    <span>Added On</span>
+                </div>
+                <div class="details">
+                    @Model.CreatedOnShow
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="attorney-content-detail">
+        <ul>
+
+            <li class="mr-15">
+                <div class="first">
+                    <span>Notification Condition</span>
+                </div>
+                <div class="details">
+                    @if (Model.IsNotifyOnActive == true)
+                    {
+                    <div class="form-group">
+                        <input type="checkbox" id="IsNotifyOnActive" name="IsNotifyOnActive" checked disabled>  Active/Open  (Receive notification when ticket has been posted)
+                    </div>
+                    }
+                    else
+                    {
+                    <div class="form-group">
+                        <input type="checkbox" id="IsNotifyOnActive" name="IsNotifyOnActive" disabled>  Active/Open  (Receive notification when ticket has been posted)
+                    </div>
+                    }
+                    @if (Model.IsNotifyOnUpdate == true)
+                    {
+
+                    <div class="form-group">
+                        <input type="checkbox" id="IsNotifyOnActive" name="IsNotifyOnActive" checked disabled> Update   (Receive notification when ticket has been updated)
+                    </div>
+                    }
+                    else
+                    {
+                    <div class="form-group">
+                        <input type="checkbox" id="IsNotifyOnActive" name="IsNotifyOnActive" disabled> Update   (Receive notification when ticket has been updated)
+                    </div>
+                    }
+                    @if (Model.IsNotifyOnClose == true)
+                    {
+
+                    <div class="form-group">
+                        <input type="checkbox" id="IsNotifyOnClose" name="IsNotifyOnClose" checked disabled>  Close  (Receive notification when ticket has been closed)
+                    </div>
+                    }
+                    else
+                    {
+                    <div class="form-group">
+                        <input type="checkbox" id="IsNotifyOnClose" name="IsNotifyOnClose" disabled>  Close  (Receive notification when ticket has been closed)
+                    </div>
+                    }
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="modal fade" id="divSuccessMessages">
+    <div class="modal-dialog modal-dialog-popup">
+        <div class="modal-content">
+            <div class="modal-header">
+                Success
+            </div>
+            <div class="modal-body">
+                <p>@ViewBag.Message</p>
+            </div>
+
+            <div class="modal-footer" style="">
+                <button type="button" class="btn btn-danger" titlt="Close" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.Success != null)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            $('#divSuccessMessages').modal('show');
+        };
+    </script>
+}

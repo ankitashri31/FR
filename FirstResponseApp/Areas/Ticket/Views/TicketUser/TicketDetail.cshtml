@@ -1,0 +1,394 @@
+﻿@model FirstResponseApp.Areas.Ticket.Models.TicketDto
+
+@{
+    ViewData["Title"] = "Ticket Detail";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/summernote/summernote.css" rel="stylesheet" />
+<script src="~/summernote/summernote.js"></script>
+
+<script src="~/js/summerNotes.js"></script>
+
+<input type="hidden" name="hdnWebsitePath" id="hdnWebsitePath" value="@ViewBag.WebsitePath">
+<input type="hidden" name="hdnEncryptedTicketTId" id="hdnEncryptedTicketTId" value="@Model.Id">
+<input type="hidden" name="hdnEncryptedTicketTId" id="hdnEncryptedTicketTId" value="@Model.LoggedInOrganisationId">
+<input type="hidden" name="hdnDocumentId" id="hdnDocumentId">
+<input type="hidden" name="hdnTableType" id="hdnTableType">
+
+<input type="hidden" name="hdnLoggedInOrganisationId" value="@Model.LoggedInOrganisationId" />
+<input type="hidden" name="hdnLinfox" value="@Model.Linfoxtext" />
+<input type="hidden" name="hdnMedilow" value="@Model.MedilawText" />
+<input type="hidden" name="hdnHwle" value="@Model.HWLEText" />
+
+<script src="~/js/TicketUser/TicketDetail.js"></script>
+<!-- Page header -->
+<style>
+    #loaderContainer{
+        position:fixed;
+    }
+</style>
+<div class="page-header page-header-light">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+
+
+
+            @if (Model.StatusId != 2)
+            {
+                <h4>@*<i class="icon-arrow-left52 mr-2"></i>*@<span class="font-weight-semibold">Ticket Detail</span></h4>
+
+                <a href="Dumy/index" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+            }
+        </div>
+    </div>
+
+</div>
+<!-- Page header -->
+
+<div class="content">
+    <div class="name"><h2 class="date pb-3 mb-3">Ticket ID --  @Model.Id</h2></div>
+
+
+    @using (Html.BeginForm("UpdateTicketDetails", "TicketUser", FormMethod.Post, new { id = "FormUpdateTicket", enctype = "multipart/form-data", area = "Ticket" }))
+    {
+
+        @Html.HiddenFor(m => m.TicketMasterId)
+        @Html.HiddenFor(m => m.LoggedInOrganisationId)
+        @Html.HiddenFor(m => m.MatterNumberView)
+
+        @if (Model.LoggedInOrganisationId == 3 && Model.StatusId != 2)
+        {
+            <div class="row label-bold">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Name</label>
+                        @Html.TextBoxFor(x => x.TicketName, new { @class = "form-control", @maxlength = "100", onkeypress = "return AllowAlphaNumeric(event);" })
+                        @Html.ValidationMessageFor(x => x.TicketName, "", new { @class = "error text-danger" })
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Client Number</label>
+                        @*<label>Matter No.</label>*@
+                        @Html.TextBoxFor(x => x.MatterNumber, new { @class = "form-control", @disabled = "disabled", @maxlength = "15", @minlength = "5", onkeypress = "return AllowAlphaNumeric(event);" })
+                        @Html.ValidationMessageFor(x => x.MatterNumber, "", new { @class = "error text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row label-bold">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Channel</label>
+                        @Html.DropDownListFor(x => Model.ChannelId, Model.ChannelList.OrderBy(x => x.Text), "--Select Waiting On--", htmlAttributes: new { @class = "form-control f-14" })
+                        @Html.ValidationMessageFor(x => x.ChannelId, "", new { @class = "error text-danger" })
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Waiting On</label>
+                        @Html.DropDownListFor(x => Model.OrganisationId, Model.OrganisationList.OrderBy(x => x.Text), "--Select Waiting On--", htmlAttributes: new { @class = "form-control f-14" })
+                        @Html.ValidationMessageFor(x => x.OrganisationId, "", new { @class = "error text-danger" })
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="attorney-content-detail">
+                <ul>
+                    <li class="mr-15">
+                        <div class="first">
+                            <span>Name</span>
+                        </div>
+                        <div class="details">
+                            @Model.TicketName
+                        </div>
+                    </li>
+                    <li class="mr-15">
+                        <div class="first">
+                            <span>Client Number</span>
+                            @*<span>Matter No.</span>*@
+                        </div>
+                        <div class="details">
+                            @Model.MatterNumberView
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="attorney-content-detail">
+                <ul>
+                    <li class="mr-15">
+                        <div class="first">
+                            <span>Channel</span>
+                        </div>
+                        <div class="details">
+                            @Model.ChannelName
+                        </div>
+                    </li>
+                    <li class="mr-15">
+                        <div class="first">
+                            <span>Waiting On</span>
+                        </div>
+                        <div class="details">
+                            @Model.WaitingOnName
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        }
+        <div class="attorney-content-detail">
+            <ul>
+                <li class="mr-15">
+                    <div class="first">
+                        <span>Created  By</span>
+                    </div>
+                    <div class="details">
+                        @Model.CreatedByName
+                    </div>
+                </li>
+                <li class="mr-15">
+                    <div class="first">
+                        <span>Created  On</span>
+                    </div>
+                    <div class="details">
+                        @Model.AddedOn
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <br />
+        <div class="attorney-content-detail">
+            <ul>
+                <li class="mr-15">
+                    <div class="first">
+                        <span>Documents</span>
+                    </div>
+                    <div class="details" style="z-index:999; position:relative">
+                        <button id="btnShowAllDocuments" type="button" data-toggle="collapse" data-target="#demo" title="All documents" class="btn btn-primary"><i id="docIcon" class="icon-file-eye2"></i> <span id="spnDocumentText"> Show all documents </span></button>
+
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-12" style="margin-top:-70px">
+                <div id="demo" class="collapse">
+                    <table id="TableDocuments" class="table table-bordered table-striped dataTable no-footer">
+                        <thead>
+                            <tr>
+                                <th>Document</th>
+                                <th>Added by</th>
+                                <th>Organization</th>
+                                <th>Added On</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+
+        <div class="full-width-list">
+            <ul class="p-0 list-unstyled">
+                <li class="">
+                    <div class="first d-flex justify-content-between mb-2">
+                        <div class="col-lg-5 pl-0"><b>Linfox Notes</b></div>
+                        <div class="col-lg-3 last-info">
+                            <b class="lastupdateby-label">Last Updated By</b> : <span class="updateby-value"> @Model.LastUpdatedByLinfox </span>
+                        </div>
+                        <div class="col-lg-4 last-info text-right"><b>Last Updated On</b> :  @Model.LastUpdatedOnLinfox</div>
+                    </div>
+                    <div class="details">
+                        @if (Model.LoggedInOrganisationId == 3 && Model.StatusId != 2)
+                        {
+
+                            @Html.TextArea("Linfoxtext", @Model.Linfoxtext, new { @class = "form-control summerNote", @id = "txtLinFoxNotes", @style = "width:100%;", @rows = "4", @cols = "50" })
+                        }
+                        else
+                        {
+                            <div class="text-area-box p-2">  @Html.Raw(@Model.Linfoxtext)</div>
+                        }
+                    </div>
+                </li>
+                <li>
+                    <br />
+                    <div class="first d-flex justify-content-between mb-2 mt-2">
+                        <div class="col-lg-5 pl-0"><b>Medilaw Notes</b></div>
+                        <div class="col-lg-3 last-info"><b class="lastupdateby-label">Last Updated By</b> :  <span class="updateby-value">@Model.LastUpdatedByMedilow</span></div>
+                        <span class="col-lg-4 last-info text-right"><b>Last Updated On</b> :  @Model.LastUpdatedOnMedilow</span>
+                    </div>
+                    <div class="details">
+                        @if (Model.LoggedInOrganisationId == 2 && Model.StatusId != 2)
+                        {
+
+                            @Html.TextArea("MedilawText", @Model.MedilawText, new { @class = "form-control summerNote", @id = "txtMedilawNotes ", @style = "width:100%;", @rows = "4", @cols = "50" })
+                        }
+                        else
+                        {
+                            <div class="text-area-box">  @Html.Raw(@Model.MedilawText)</div>
+                            // @Html.TextArea("MedilawText", @Model.MedilawText, new { @disabled = "disabled", @class = "form-control ", @id = "txtMedilawNotes ", @style = "width:100%;", @rows = "4", @cols = "50" })
+                        }
+                    </div>
+                </li>
+                <li>
+                    <br />
+                    <div class="first d-flex justify-content-between mb-2 mt-2">
+                        <div class="col-lg-5  pl-0"><b>HWLE Notes</b></div>
+                        <span class="col-lg-3 last-info"><b class="lastupdateby-label">Last Updated By</b> :  <span class="updateby-value">@Model.LastUpdatedByHwle</span></span>
+                        <span class="col-lg-4 last-info text-right"><b>Last Updated On</b> :  @Model.LastUpdatedOnHwle</span>
+                    </div>
+                    <div class="details">
+                        <div class="form-group">
+
+                            @if (Model.LoggedInOrganisationId == 1 && Model.StatusId != 2)
+                            {
+
+                                @Html.TextArea("HWLEText", @Model.HWLEText, new { @class = "form-control summerNote", @id = "txtHWLENotes", @style = "width:100%;", @rows = "4", @cols = "50" })
+                            }
+                            else
+                            {
+                                <div class="text-area-box p-2">  @Html.Raw(@Model.HWLEText)</div>
+                            }
+
+
+                            @*<textarea id="txtHWLENotes" class="summerNote" rows="4" cols="50" style="width:100%;">
+
+                                </textarea>*@
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+
+        @if (Model.StatusId != 2)
+        {
+            <div class="attorney-content-detail attach-document">
+                <ul>
+                    <li class="mr-15 flex-wrap">
+                        <div class="w-100 mb-2">
+                            <span class="customlabel">Attach Document &nbsp;&nbsp;</span>
+                        </div>
+                        <div class="d-flex w-100">
+                            <div class="upload-btn uploadhide">
+                                @Html.TextBoxFor(x => x.Documents, new { type = "file", @name = "files", @class = "btn btn-info upload-input", accept = ".jpg,.png,.doc,.docx,.pdf,.xls,.xlsx,.mp4,.avi", title = "Select file", @id = "FileUpload" })
+                                <div id="spnFileTypesFormat" class="error text-danger" style="display:none;color:red;">Please upload only supported file format.</div>
+                                <div id="errorSize" class="error text-danger" style="display:none;color:red;">Maximum allowed file size is 25 MB.</div>
+                            </div>
+                            <div class="clear-btn ml-2">
+                                <button type="button" onclick="ClearFileUpload();" class="btn btn-primary btn-h44" title="Clear"><i class="mr-2 icon-cancel-square2"></i> Clear</button>
+                            </div>
+
+
+                        </div>
+                        <div class="file-format mb-2">
+                            <span class="form-text text-muted">Supported file format - .jpg .png .doc .docx .pdf .xls .xlsx .mp4 .avi</span>
+                            <span class="form-text text-muted">
+                                Maximum file size for each document is <code>25 Mb</code>
+                            </span>
+                        </div>
+                    </li>
+                    <li class="mr-15">
+                        <div class="row w-100">
+                            <div class="col-lg-6">
+                                @if (Model.LoggedInOrganisationId == 3)
+                                {
+                                }
+                                else
+                                {
+                                    <div class="mb-2">
+                                        <span class="customlabel">@Html.DisplayNameFor(x => x.WaitingOn)</span>
+                                    </div>
+                                    <div>
+                                        @Html.DropDownListFor(x => Model.WaitingOn, Model.OrganisationList.OrderBy(x => x.Text), "Select Waiting On", htmlAttributes: new { @class = "form-control f-14" })
+                                        @Html.ValidationMessageFor(x => x.WaitingOn, "", new { @class = "error text-danger" })
+                                    </div>
+
+                                }
+                            </div>
+                            <div class="col-lg-6">
+                                @if (Model.LoggedInOrganisationId == 1)
+                                {
+                                    <div class="mb-2">
+                                        <span class="customlabel">@Html.DisplayNameFor(x => x.MatterNumber)</span>
+                                    </div>
+                                    <div>
+                                        @Html.TextBoxFor(x => x.MatterNumber, new { @class = "form-control ", @maxlength = "15", @minlength = "5", onkeypress = "return AllowAlphaNumeric(event)" })
+                                        @Html.ValidationMessageFor(x => x.MatterNumber, "", new { @class = "error text-danger" })
+                                    </div>
+
+                                }
+                            </div>
+                        </div>
+
+
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div class="row">
+                <div class="col-12 text-right">
+                    <button type="button" onclick="RedirectToDashbaord();" class="btn bg-indigo-300" title="Back"> <i class="icon-arrow-left7"></i> Back</button>
+                    <button type="submit" class="btn btn-primary" title="Update Details" data-dismiss="modal"><i class="icon-checkmark"></i> Update Details</button>
+
+
+                </div>
+            </div>
+        }
+        else
+        {
+
+            <div class="row">
+                <div class="col-12 text-right">
+                    <button type="button" onclick="RedirectToDashbaord();" class="btn bg-indigo-300" title="Back"> <i class="icon-arrow-left7"></i> Back</button>
+
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<div class="modal fade" id="ConfirmDeletePopup">
+    <div class="modal-dialog modal-dialog-popup">
+        <div class="modal-content">
+            <div class="modal-header">
+                Delete Document
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the document?
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnDeleteDocument" title="Confirm" onclick="SubmitDeleteDocument();" class="btn btn-primary">Confirm</button>
+                <button type="button" class="btn btn-danger" title="Cancel" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="divSuccessCloseMessages">
+    <div class="modal-dialog modal-dialog-popup">
+        <div class="modal-content">
+            <div class="modal-header">
+                <b> Success</b>
+            </div>
+            <div class="modal-body">
+                <p id="SuccessTextCloseMessage"></p>
+                <label id="divSuccessCloseText"></label>
+            </div>
+            <div class="modal-footer justify-content-center" style="">
+                <button type="button" class="btn btn-danger" titlt="Close" data-dismiss="modal">Close</button>
+                @*<div class="modal-footer">
+                    <button type="button" class="btn btn-danger" titlt="Close" data-dismiss="modal">Close</button>
+                </div>*@
+            </div>
+        </div>
+    </div>
+</div>

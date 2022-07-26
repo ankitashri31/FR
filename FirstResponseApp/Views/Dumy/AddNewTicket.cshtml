@@ -1,0 +1,58 @@
+﻿@model FirstResponseApp.Helper.Matter
+@{
+    ViewData["Title"] = "CreateMatter";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header page-header-light">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4>@*<i class="icon-arrow-left52 mr-2"></i>*@ <span class="font-weight-semibold">Add Ticket</span></h4>
+            <a href="Dumy/index" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="row col-12">
+        <div class="col-6">
+            <div class="form-group">
+                @Html.DisplayNameFor(x => x.UserName)
+                @Html.DropDownListFor(x => Model.UserName, Model.UserNameList.OrderBy(x => x.Text), "--Select User--", htmlAttributes: new { @class = "form-control mt-2  f-14" })
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                @Html.DisplayNameFor(x => x.Channel)
+                @Html.DropDownListFor(x => Model.Channel, Model.ChannelList.OrderBy(x => x.Text), "--Select Channel--", htmlAttributes: new { @class = "form-control mt-2  f-14" })
+            </div>
+        </div>
+    </div>
+    <div class="row col-12">
+        <div class="col-6">
+            <div class="form-group">
+                @Html.DisplayNameFor(x => x.TicketName)
+                @Html.TextBoxFor(x => x.TicketName, new { @class = "form-control mt-2" })
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                @Html.DisplayNameFor(x => x.WaitingOn)
+                @Html.DropDownListFor(x => Model.WaitingOn, Model.WaitingOnList.OrderBy(x => x.Text), "--Select Waiting On--", htmlAttributes: new { @class = "form-control mt-2  f-14" })
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            @Html.DisplayNameFor(x => x.Notes)
+            @Html.TextBoxFor(x => x.Notes, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row col-12">
+        <div class="col-9"></div>
+        <div class="col-3">
+            <button type="submit" class="btn btn-primary" title="Submit"><i class="icon-checkmark mr-2"></i> Add Ticket</button>
+        </div>
+    </div>
+</div>
+

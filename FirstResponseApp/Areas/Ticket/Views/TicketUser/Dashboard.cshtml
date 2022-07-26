@@ -1,0 +1,260 @@
+﻿@model FirstResponseApp.Areas.Ticket.Models.TicketDto
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayoutDashboard.cshtml";
+}
+
+
+
+
+<script src="~/js/DataTable/Datatable.min.js"></script>
+<link href="~/js/DataTable/Datatables.min.css" rel="stylesheet" />
+<script src="~/js/DataTable/Materialize.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+<script src="~/js/TicketUser/Dashboard.js"></script>
+<input type="hidden" name="hdnWebsitePath" id="hdnWebsitePath" value="@ViewBag.WebsitePath">
+<input type="hidden" name="LoggedInOrganisationId" id="LoggedInOrganisationId" value="@ViewBag.LoggedInOrganisationId">
+<input type="hidden" name="hdnTicketId" id="hdnTicketId">
+
+<!-- Page header -->
+<input type="hidden" id="hdnDocumentId" name="hdnDocumentId" />
+<div class="page-header page-header-light">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4> <span class="font-weight-semibold">All Tickets</span></h4>
+            <a href="Dumy/index" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+        </div>
+    </div>
+    <!-- Page header -->
+
+</div>
+<!-- /page header -->
+<!-- Content area -->
+
+<div class="content pt-2">
+    <div class="text-right">
+
+        @if (Model.LoggedInOrganisationId == 3)
+        @*@if (Model.LoggedInOrganisationId == 3 || Model.LoggedInOrganisationId == 1)*@
+        {
+            <div class="text-right">
+                <button type="button" onclick="RedirectToAddTicket();" id="AddTicket" class="btn btn-primary" title="Add New Ticket" ><i class="icon-plus2 mr-1"></i> Add New Ticket</button>
+            </div>
+
+
+            @*<a class="cke_button" href="@Url.Action("AddTicket", "TicketUser")" style="float:right"><i class="icon-plus2 mr-1"></i> Add New Ticket</a>*@
+        }
+        else if (Model.LoggedInOrganisationId == 1)
+        {
+            <div class="text-right">
+                <button type="button" onclick="RedirectToHwleAddTicket();"  class="btn btn-primary" id="hwleAddTicket" title="Add New Ticket"><i class="icon-plus2 mr-1"></i> Add New Ticket</button>
+            </div>
+        }
+
+
+    </div>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active cstmtabfont" id="Active-tab" data-toggle="tab" href="#Active" role="tab" aria-controls="Active"
+               aria-selected="true">Active</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link cstmtabfont" id="Closed-tab" data-toggle="tab" href="#Closed" role="tab" aria-controls="Closed"  aria-selected="false">Closed</a>
+        </li>
+    </ul>
+             
+
+    <div class="tab-content pages-content-section" id="myTabContent">
+        <div class="tab-pane fade show active" id="Active" role="tabpanel" aria-labelledby="Active-tab">
+            <div class="card-body">
+                <div class="form-row label-bold">
+                    <div class="col-2 pl-0">
+                        <div class="form-group">
+                            <label>@Html.DisplayNameFor(x => x.ChannelId)</label>
+
+                            @Html.DropDownListFor(x => Model.ChannelId, Model.ChannelList.OrderBy(x => x.Text), "Select Channel", htmlAttributes: new { @class = "form-control f-14", @id = "txtActiveChannel" })
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label>@Html.DisplayNameFor(x => x.OrganisationId)</label>
+
+                            @Html.DropDownListFor(x => Model.OrganisationId, Model.OrganisationList.OrderBy(x => x.Text), "Select Waiting On", htmlAttributes: new { @class = "form-control f-14", @id = "txtWaitingOn" })
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label>
+                                @Html.DisplayNameFor(x => x.CreatedOn)
+                            </label>
+                            @Html.TextBoxFor(x => x.CreatedOn, "{0:d MMM yyyy}", new { @class = "form-control f-14", placeholder = "Select date", @readonly = "readonly", @id = "txtCreatedActiveTicket" })
+
+
+                        </div>
+
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label>
+                                @Html.DisplayNameFor(x => x.SearchText)
+                            </label>
+                            @Html.TextBoxFor(x => x.SearchText, new { @class = "form-control f-14", @id = "SearchActiveTicket", onkeypress = "return AllowAlphaNumeric(event)" })
+
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label>&nbsp;</label>
+                        <button type="button" onclick="BindTicketData();" class="btn btn-primary" id="txtSearchActive" title="Search" style="margin-top:25px;"><i class="icon-search4"></i> Search</button>
+                        <button type="button" onclick="ResetActiveFilter();" class="btn bg-indigo-300" title="Reset" style="margin-top:25px;"><i class="icon-rotate-cw3"></i> Reset </button>
+
+                    </div>
+                </div>
+                <table id="TableActiveTicket" class="table table-bordered table-striped dataTable no-footer">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Channel</th>
+                            <th>Waiting On</th>
+                            <th>Added By</th>
+                            <th>Added On</th>
+
+                            @*@if (Model.LoggedInOrganisationId == 3)*@
+                            @if (Model.LoggedInOrganisationId == 3 || Model.LoggedInOrganisationId == 1)
+                            {
+                                <th class="text-center" style="width:50px">Action</th>
+                            }
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="Closed" role="tabpanel" aria-labelledby="Closed-tab">
+            <div class="card-body">
+                <div class="form-row label-bold">
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label> @Html.DisplayNameFor(x => x.ChannelId)</label>
+                            @Html.DropDownListFor(x => Model.ChannelList, Model.ChannelList.OrderBy(x => x.Text), "Select Channel", htmlAttributes: new { @class = "form-control", @id = "txtClosedChannel" })
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label>
+                                @Html.DisplayNameFor(x => x.OrganisationId)
+                            </label>
+                            @Html.DropDownListFor(x => Model.OrganisationId, Model.OrganisationList.OrderBy(x => x.Text), "Select Waiting On", htmlAttributes: new { @class = "form-control", @id = "txtClosedWaitingOn" })
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label>
+                                @Html.DisplayNameFor(x => x.CreatedOn)
+                            </label>
+                            @Html.TextBoxFor(x => x.CreatedOn, "{0:d MMM yyyy}", new { @class = "form-control", placeholder = "Select date", @readonly = "readonly", @id = "txtSearchCloseDate" })
+                        </div>
+
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label>
+                                @Html.DisplayNameFor(x => x.SearchTextForClosed)
+                            </label>
+                            @Html.TextBoxFor(x => x.SearchTextForClosed, new { @class = "form-control", @id = "txtClosedSearch", @onkeypress = "return AllowAlphaNumeric(event)", @placeholder = "Search By Keyword" })
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label>&nbsp;</label>
+                        <button type="button" class="btn btn-primary" style="margin-top:25px;" onclick="BindClosedTicketData();" title="Search"><i class="icon-search4"></i>Search</button>
+                        <button type="button" onclick="ResetClosedFilter();" style="margin-top:25px;" class="btn bg-indigo-300" title="Reset"><i class="icon-rotate-cw3"></i>Reset </button>
+
+                    </div>
+                </div>
+                <table id="TableClosedTickets" class="table table-bordered table-striped dataTable no-footer">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Channel</th>
+                            <th class="text-center">Closed By</th>
+                            <th class="text-center">Closed On</th>
+                            <th class="text-center">Added By</th>
+                            <th class="text-center">Added On</th>
+
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="modal fade" id="divSuccessCloseMessages">
+    <div class="modal-dialog modal-dialog-popup">
+        <div class="modal-content">
+            <div class="modal-header">
+                Success
+            </div>
+            <div class="modal-body">
+
+                <p id="SuccessTextCloseMessage">@ViewBag.Message</p>
+
+            </div>
+
+            <div class="modal-footer" style="">
+                <button type="button" class="btn btn-danger" titlt="Close" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ConfirmCloseTicketPopup">
+    <div class="modal-dialog modal-dialog-popup">
+        <div class="modal-content">
+            <div class="modal-header">
+                Confirm Close Ticket
+            </div>
+            <div class="modal-body">
+                Are you sure you want to close ticket?
+            </div>
+            @Html.HiddenFor(m => m.Id)
+            <div class="modal-footer" style="">
+                <button type="button" id="btnConfirmDeactive" title="Confirm" onclick="SubmitCloseTicketPopup();" class="btn btn-primary">Confirm</button>
+                <button type="button" class="btn btn-danger" title="Cancel" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="divSuccessMessages">
+    <div class="modal-dialog modal-dialog-popup">
+        <div class="modal-content">
+            <div class="modal-header">
+                Success
+            </div>
+            <div class="modal-body">
+                @ViewBag.Message
+            </div>
+
+            <div class="modal-footer" style="">
+
+                <button type="button" class="btn btn-danger" titlt="Close" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (ViewBag.Success != null)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            $('#divSuccessMessages').modal('show');
+        };
+    </script>
+}

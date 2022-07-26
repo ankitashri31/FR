@@ -1,0 +1,147 @@
+﻿@model FirstResponseApp.Helper.User
+@{
+    ViewData["Title"] = "User";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<script src="~/js/DataTable/Datatable.min.js"></script>
+<link href="~/js/DataTable/Datatables.min.css" rel="stylesheet" />
+<script src="~/js/DataTable/Materialize.min.js"></script>
+<script src="~/js/Admin/Matter.js"></script>
+<script>
+    $(document).ready(function () {
+
+    })
+</script>
+
+<div class="page-header page-header-light">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4> <span class="font-weight-semibold">Users Management</span></h4>
+            <a href="Dumy/index" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+        </div>
+    </div>
+    <!-- Page header -->
+
+</div>
+
+<div class="content">
+    <div class="row">
+        <div class=" row col-12">
+            <div class="row col-9"></div>
+            <div class="row col-3">
+                <a class="cke_button" asp-action="AddNewUser" asp-controller="Dumy" style="float:right"><i class="icon-plus2 mr-1"></i> Add New User</a>
+            </div>
+        </div>
+        <div class=" row col-12">
+            <div class="row col-12">
+                <div class="col-2">
+                    <div class="form-group">
+                        @Html.DisplayNameFor(x => x.Organizetion)
+                        @Html.DropDownListFor(x => Model.Organizetion, Model.OrganizetionList.OrderBy(x => x.Text), "--Select Organizetion--", htmlAttributes: new { @class = "form-control mt-2  f-14" })
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        @Html.DisplayNameFor(x => x.Active)
+                        @Html.DropDownListFor(x => Model.Active, Model.ActiveList.OrderBy(x => x.Text), "--Select Active--", htmlAttributes: new { @class = "form-control mt-2  f-14" })
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        @Html.DisplayNameFor(x => x.SearchDate)
+                        @Html.TextBoxFor(x => x.SearchDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+                    </div>
+
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        @Html.DisplayNameFor(x => x.Search)
+                        @Html.TextBoxFor(x => x.Search, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-2">
+                    <button type="submit" class="btn btn-primary" title="Submit" style="margin-top:25px;"><i class="icon-plus2 mr-1"></i> Search</button>
+                </div>
+            </div>
+            <table id="TableVoiData1" class="table table-bordered table-striped dataTable no-footer">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Organization</th>
+                        <th>Email Type</th>
+                        <th>Status</th>
+                        <th>Added On</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr role="row" class="odd">
+                        <td>123</td>
+                        <td>John</td>
+                        <td>John@gmail.com</td>
+                        <td>HWLE</td>
+                        <td>Open/Close</td>
+                        <td>Active</td>
+                        <td>01/12/2020</td>
+                        <td>
+                            <div class="list-icons">
+                                <div class="dropdown">
+                                    <a href="#" class="list-icons-item" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="icon-menu9"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-158px, 19px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr role="row" class="odd">
+                        <td>456</td>
+                        <td>Barry</td>
+                        <td>Barry@gmail.com</td>
+                        <td>Medilaw</td>
+                        <td>Open/Update/Close</td>
+                        <td>Active</td>
+                        <td>01/12/2020</td>
+                        <td>
+                            <div class="list-icons">
+                                <div class="dropdown">
+                                    <a href="#" class="list-icons-item" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="icon-menu9"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-158px, 19px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr role="row" class="odd">
+                        <td>789</td>
+                        <td>Stan</td>
+                        <td>Stan@gmail.com</td>
+                        <td>Linfox</td>
+                        <td>Open</td>
+                        <td>Active</td>
+                        <td>01/12/2020</td>
+                        <td>
+                            <div class="list-icons">
+                                <div class="dropdown">
+                                    <a href="#" class="list-icons-item" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="icon-menu9"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-158px, 19px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+</table>
+        </div>
+    </div>
+    
+
+    
+</div>

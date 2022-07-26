@@ -1,0 +1,147 @@
+﻿@model FirstResponseApp.Areas.Ticket.Models.UserDto
+@{
+    ViewData["Title"] = "Add User";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<script src="~/js/TicketUser/AddUser.js"></script>
+
+
+<div class="page-header page-header-light">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4>@*<i class="icon-arrow-left52 mr-2"></i>*@ <span class="font-weight-semibold">Add User</span></h4>
+            <a href="Dumy/index" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+        </div>
+    </div>
+</div>
+<div class="content label-bold">
+    @using (Html.BeginForm("AddUser", "TicketUser", FormMethod.Post, new { id = "AddUserForm", enctype = "multipart/form-data", area = "Ticket",  }))
+    {
+
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>@Html.DisplayNameFor(x => x.Name) <span class="text-danger">*</span></label>
+                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "error text-danger" })
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(x => x.LastName)<span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(x => x.LastName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "error text-danger" })
+</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(x => x.EmailAddress)<span class="text-danger">*</span>
+                    </label>
+                                        @Html.TextBoxFor(x => x.EmailAddress, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "error text-danger" })
+</div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(x => x.OrganisationId)<span class="text-danger">*</span>
+                    </label>
+                        @Html.DropDownListFor(x => Model.OrganisationId, Model.OrganizationList.OrderBy(x => x.Text), "Select Organization", htmlAttributes: new { @class = "form-control f-14" })
+                        @Html.ValidationMessageFor(model => model.OrganisationId, "", new { @class = "error text-danger" })
+</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(x => x.NotificationCondition)<span class="text-danger">*</span></label>
+                                        <span id="divNotificationCondition" class="text-danger" style="display:none">Please select atleast one notification condition.</span>
+</div>
+            </div>
+            <div id="DivCheck" class="col-9">
+                <div class="form-group">
+                    <label class="checkbox pull-left">
+                        @Html.CheckBoxFor(m => m.IsNotifyOnActive, new { @name = "LandscapeServices" })
+                        Active/Open (Receive notification when ticket has been posted)
+                    </label>
+                </div>
+                <div class="form-group">
+
+                    <label class="checkbox pull-left">
+                        @Html.CheckBoxFor(m => m.IsNotifyOnUpdate, new { @name = "LandscapeServices" })
+                        Update  (Receive notification when ticket has been updated)
+                    </label>
+
+                </div>
+                <div class="form-group">
+
+                    <label class="checkbox pull-left">
+                        @Html.CheckBoxFor(m => m.IsNotifyOnClose, new { @name = "LandscapeServices" })
+                        Close (Receive notification when ticket has been closed)
+                    </label>
+
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row">            
+            <div class="col-12 text-right">
+                <button id="btnCreateUser" type="submit" class="btn btn-primary" title="Create User"><i class="icon-checkmark mr-2"></i> Create User</button>
+                @*@Html.ActionLink("Cancel", "AllUser", "TicketUser", new { @class = "btn btn-danger" }, new { @class = "btn btn-danger", @title = "Cancel" })*@
+                <a class="btn btn-danger" href='@Url.Action("AllUser","TicketUser")'><i class="icon-cross2"></i> Cancel</a>
+            </div>
+        </div>
+    }
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#btnCreateUser").click(function () {
+            var status = $('#AddUserForm').valid();
+            var checked_checkboxes = $("#DivCheck input[type=checkbox]:checked");
+            if (checked_checkboxes.length == 0) {
+
+                $("#divNotificationCondition").show();
+                return false;
+            }
+            else {
+                $("#divNotificationCondition").hide();
+            }
+            return true;
+        });
+
+    });
+</script>
+
+<script>
+    var showLoader = function (form) {
+        $("<div />").css({
+            'position': 'fixed',
+            'left': 0,
+            'right': 0,
+            'bottom': 0,
+            'top': 0,
+            'background': '#0020ff36',
+            'z-index': '99',
+            'text-align': 'center'
+        }).appendTo($("body"))
+            .append(
+                $("<img />").attr("src", "https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif")
+            );
+    }
+</script>
+
+
+<script src="~/lib/jquery/jquery.js"></script>
+<script src="~/lib/jquery-validate/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+

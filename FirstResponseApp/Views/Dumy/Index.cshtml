@@ -1,0 +1,175 @@
+﻿@model FirstResponseApp.Helper.Matter
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+@*DatePicker Query start
+<script src="~/js/Admin/jquery-ui.js"></script>*@
+@*DatePicker Query end*@
+
+
+<script src="~/js/DataTable/Datatable.min.js"></script>
+<link href="~/js/DataTable/Datatables.min.css" rel="stylesheet" />
+
+<script src="~/js/Admin/Matter.js"></script>
+<script>
+    $(document).ready(function () {
+
+    })
+</script>
+
+
+
+
+<!-- Page header -->
+<input type="hidden" id="hdnDocumentId" name="hdnDocumentId" />
+<div class="page-header page-header-light">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4> <span class="font-weight-semibold">Tickets</span></h4>
+            <a href="Dumy/index" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+        </div>
+    </div>
+    <!-- Page header -->
+
+</div>
+<!-- /page header -->
+<!-- Content area -->
+
+<div class="content">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="Active-tab" data-toggle="tab" href="#Active" role="tab" aria-controls="Active"
+               aria-selected="true">Active</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="Closed-tab" data-toggle="tab" href="#Closed" role="tab" aria-controls="Closed"
+               aria-selected="false">Closed</a>
+        </li>
+    </ul>
+    <a class="cke_button" asp-action="AddNewTicket" asp-controller="Dumy" style="float:right" ><i class="icon-plus2 mr-1"></i> Add New Ticket</a>
+    
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="Active" role="tabpanel" aria-labelledby="Active-tab">
+            <div class="card-body">
+                <div class="row col-12">
+                    <div class="col-2">
+                        <div class="form-group">
+                            @Html.DisplayNameFor(x => x.Channel)
+                            @Html.DropDownListFor(x => Model.Channel, Model.ChannelList.OrderBy(x => x.Text), "--Select Channel--", htmlAttributes: new { @class = "form-control mt-2  f-14" })
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            @Html.DisplayNameFor(x => x.WaitingOn)
+                            @Html.DropDownListFor(x => Model.WaitingOn, Model.WaitingOnList.OrderBy(x => x.Text), "--Select Waiting On--", htmlAttributes: new { @class = "form-control mt-2  f-14" })
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            @Html.DisplayNameFor(x => x.SearchDate)
+                            @Html.TextBoxFor(x => x.SearchDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+                        </div>
+
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            @Html.DisplayNameFor(x => x.Search)
+                            @Html.TextBoxFor(x => x.Search, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <button type="submit" class="btn btn-primary" title="Submit" style="margin-top:25px;"><i class="icon-plus2 mr-1"></i> Search</button>
+                    </div>
+                </div>
+                <table id="TableVoiData" class="table table-bordered table-striped dataTable no-footer">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Channel</th>
+                            <th>Waiting on</th>
+                            <th>AddedBy</th>
+                            <th>AddedOn</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="Closed" role="tabpanel" aria-labelledby="Closed-tab">
+            <div class="card-body">
+                <div class="row col-12">
+                    <div class="col-2">
+                        <div class="form-group">
+                            @Html.DisplayNameFor(x => x.Channel)
+                            @Html.DropDownListFor(x => Model.Channel, Model.ChannelList.OrderBy(x => x.Text), "--Select Channel--", htmlAttributes: new { @class = "form-control mt-2  f-14" })
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            @Html.DisplayNameFor(x => x.WaitingOn)
+                            @Html.DropDownListFor(x => Model.WaitingOn, Model.WaitingOnList.OrderBy(x => x.Text), "--Select Waiting On--", htmlAttributes: new { @class = "form-control mt-2  f-14" })
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            @Html.DisplayNameFor(x => x.SearchDate)
+                            @Html.TextBoxFor(x => x.SearchDate, "{0:d MMM yyyy}", new { @class = "form-control", @id="txtSearchCloseDate" })
+                        </div>
+
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            @Html.DisplayNameFor(x => x.Search)
+                            @Html.TextBoxFor(x => x.Search, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <button type="submit" class="btn btn-primary" title="Submit" style="margin-top:25px"><i class="icon-checkmark mr-2"></i> Submit</button>
+                    </div>
+                </div>
+                <table id="TableVoiData1" class="table table-bordered table-striped dataTable no-footer">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Channel</th>
+                            <th>Waiting on</th>
+                            <th>AddedBy</th>
+                            <th>AddedOn</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody><tr role="row" class="odd"><td>0</td><td>test</td><td>channel</td><td>waiting</td><td>AddedBy</td><td>AddedOn</td><td><div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown" aria-expanded="false"><i class="icon-menu9"></i></a><div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-158px, 19px, 0px); top: 0px; left: 0px; will-change: transform;"><a href="Dumy/AddNewTicket" class="dropdown-item show"><i class="icon-eye"></i> Edit</a><a class="dropdown-item delete openPopup" onclick="OpenConfirmPopup()"><i class="icon-trash mr-1"></i> Delete</a></div></div></div></td></tr><tr role="row" class="even"><td>1</td><td>test</td><td>channel</td><td>waiting</td><td>AddedBy</td><td>AddedOn</td><td><div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown" aria-expanded="false"><i class="icon-menu9"></i></a><div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-158px, 19px, 0px); top: 0px; left: 0px; will-change: transform;"><a href="Dumy/AddNewTicket" class="dropdown-item show"><i class="icon-eye"></i> Edit</a><a class="dropdown-item delete openPopup" onclick="OpenConfirmPopup()"><i class="icon-trash mr-1"></i> Delete</a></div></div></div></td></tr><tr role="row" class="odd"><td>2</td><td>test</td><td>channel</td><td>waiting</td><td>AddedBy</td><td>AddedOn</td><td><div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown" aria-expanded="false"><i class="icon-menu9"></i></a><div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-158px, 19px, 0px); top: 0px; left: 0px; will-change: transform;"><a href="Dumy/AddNewTicket" class="dropdown-item show"><i class="icon-eye"></i> Edit</a><a class="dropdown-item delete openPopup" onclick="OpenConfirmPopup()"><i class="icon-trash mr-1"></i> Delete</a></div></div></div></td></tr><tr role="row" class="even"><td>3</td><td>test</td><td>channel</td><td>waiting</td><td>AddedBy</td><td>AddedOn</td><td><div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown" aria-expanded="false"><i class="icon-menu9"></i></a><div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-158px, 19px, 0px); top: 0px; left: 0px; will-change: transform;"><a href="Dumy/AddNewTicket" class="dropdown-item show"><i class="icon-eye"></i> Edit</a><a class="dropdown-item delete openPopup" onclick="OpenConfirmPopup()"><i class="icon-trash mr-1"></i> Delete</a></div></div></div></td></tr><tr role="row" class="odd"><td>4</td><td>test</td><td>channel</td><td>waiting</td><td>AddedBy</td><td>AddedOn</td><td><div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown" aria-expanded="false"><i class="icon-menu9"></i></a><div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-158px, 19px, 0px); top: 0px; left: 0px; will-change: transform;"><a href="Dumy/AddNewTicket" class="dropdown-item show"><i class="icon-eye"></i> Edit</a><a class="dropdown-item delete openPopup" onclick="OpenConfirmPopup()"><i class="icon-trash mr-1"></i> Delete</a></div></div></div></td></tr><tr role="row" class="even"><td>5</td><td>test</td><td>channel</td><td>waiting</td><td>AddedBy</td><td>AddedOn</td><td><div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown" aria-expanded="false"><i class="icon-menu9"></i></a><div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-158px, 19px, 0px); top: 0px; left: 0px; will-change: transform;"><a href="Dumy/AddNewTicket" class="dropdown-item show"><i class="icon-eye"></i> Edit</a><a class="dropdown-item delete openPopup" onclick="OpenConfirmPopup()"><i class="icon-trash mr-1"></i> Delete</a></div></div></div></td></tr><tr role="row" class="odd"><td>6</td><td>test</td><td>channel</td><td>waiting</td><td>AddedBy</td><td>AddedOn</td><td><div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown" aria-expanded="false"><i class="icon-menu9"></i></a><div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-158px, 19px, 0px); top: 0px; left: 0px; will-change: transform;"><a href="Dumy/AddNewTicket" class="dropdown-item show"><i class="icon-eye"></i> Edit</a><a class="dropdown-item delete openPopup" onclick="OpenConfirmPopup()"><i class="icon-trash mr-1"></i> Delete</a></div></div></div></td></tr><tr role="row" class="even"><td>7</td><td>test</td><td>channel</td><td>waiting</td><td>AddedBy</td><td>AddedOn</td><td><div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown" aria-expanded="false"><i class="icon-menu9"></i></a><div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-158px, 19px, 0px); top: 0px; left: 0px; will-change: transform;"><a href="Dumy/AddNewTicket" class="dropdown-item show"><i class="icon-eye"></i> Edit</a><a class="dropdown-item delete openPopup" onclick="OpenConfirmPopup()"><i class="icon-trash mr-1"></i> Delete</a></div></div></div></td></tr><tr role="row" class="odd"><td>8</td><td>test</td><td>channel</td><td>waiting</td><td>AddedBy</td><td>AddedOn</td><td><div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown" aria-expanded="false"><i class="icon-menu9"></i></a><div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-158px, 19px, 0px); top: 0px; left: 0px; will-change: transform;"><a href="Dumy/AddNewTicket" class="dropdown-item show"><i class="icon-eye"></i> Edit</a><a class="dropdown-item delete openPopup" onclick="OpenConfirmPopup()"><i class="icon-trash mr-1"></i> Delete</a></div></div></div></td></tr><tr role="row" class="even"><td>9</td><td>test</td><td>channel</td><td>waiting</td><td>AddedBy</td><td>AddedOn</td><td><div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown" aria-expanded="false"><i class="icon-menu9"></i></a><div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-158px, 19px, 0px); top: 0px; left: 0px; will-change: transform;"><a href="Dumy/AddNewTicket" class="dropdown-item show"><i class="icon-eye"></i> Edit</a><a class="dropdown-item delete openPopup" onclick="OpenConfirmPopup()"><i class="icon-trash mr-1"></i> Delete</a></div></div></div></td></tr><tr role="row" class="odd"><td>10</td><td>test</td><td>channel</td><td>waiting</td><td>AddedBy</td><td>AddedOn</td><td><div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown" aria-expanded="false"><i class="icon-menu9"></i></a><div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-158px, 19px, 0px); top: 0px; left: 0px; will-change: transform;"><a href="Dumy/AddNewTicket" class="dropdown-item show"><i class="icon-eye"></i> Edit</a><a class="dropdown-item delete openPopup" onclick="OpenConfirmPopup()"><i class="icon-trash mr-1"></i> Delete</a></div></div></div></td></tr></tbody>
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="modal fade" id="MyDeletePopup">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Confirm Delete
+            </div>
+            <div class="modal-body">
+                Are you sure you want to Delete Document?
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" title="Cancel" data-dismiss="modal">Cancel</button>
+                <button type="button" id="btnConfirmDelete" title="Confirm" onclick="btnConfirmDelete();" class="btn btn-primary"><i class="icon-checkmark mr-2"></i> Confirm</button>
+            </div>
+        </div>
+    </div>
+
+</div>

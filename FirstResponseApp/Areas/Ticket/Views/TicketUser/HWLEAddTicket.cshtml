@@ -1,0 +1,120 @@
+﻿@model FirstResponseApp.Areas.Ticket.Models.TicketDto
+@{
+    ViewData["Title"] = "HWLE Add Tickett";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<link href="~/summernote/summernote.css" rel="stylesheet" />
+<script src="~/summernote/summernote.js"></script>
+<script src="~/js/summerNotes.js"></script>
+<script src="~/js/TicketUser/AddTicket.js"></script>
+
+<input type="hidden" name="hdnWebsitePath" id="hdnWebsitePath" value="@ViewBag.WebsitePath">
+<div class="page-header page-header-light">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4>@*<i class="icon-arrow-left52 mr-2"></i>*@ <span class="font-weight-semibold">Add New Ticket</span></h4>
+            <a href="Dumy/index" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("AddTicket", "TicketUser", FormMethod.Post, new { id = "FormAddTicket", enctype = "multipart/form-data", area = "Ticket" }))
+{
+
+    <div class="content label-bold">
+
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label> @Html.DisplayNameFor(x => x.TicketName)<span class="text-danger">*</span></label>
+                    @Html.TextBoxFor(x => x.TicketName, new { @class = "form-control", @maxlength = "100", onkeypress = "return AllowAlphaNumeric(event)" })
+                    @Html.ValidationMessageFor(x => x.TicketName, "", new { @class = "error text-danger" })
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(x => x.ChannelId)  <span class="text-danger">*</span>
+                    </label>
+                    @Html.DropDownListFor(x => Model.ChannelId, Model.ChannelList.OrderBy(x => x.Text), "Select Channel", htmlAttributes: new { @class = "form-control f-14" })
+                    @Html.ValidationMessageFor(x => x.ChannelId, "", new { @class = "error text-danger" })
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(x => x.OrganisationId)  <span class="text-danger">*</span>
+                    </label>
+                    @Html.DropDownListFor(x => Model.OrganisationId, Model.OrganisationList.OrderBy(x => x.Text), "Select Waiting On", htmlAttributes: new { @class = "form-control f-14" })
+                    @Html.ValidationMessageFor(x => x.OrganisationId, "", new { @class = "error text-danger" })
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(x => x.MatterNumber)
+                    </label>
+                    @Html.TextBoxFor(x => x.MatterNumber, new { @class = "form-control ", @maxlength = "15", @minlength = "5", onkeypress = "return AllowAlphaNumeric(event)" })
+                    @Html.ValidationMessageFor(x => x.MatterNumber, "", new { @class = "error text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label>@Html.DisplayNameFor(x => x.HwleTicketNotes)</label>
+                    @Html.TextArea("TicketNotes", @Model.TicketNotes, new { @class = "form-control summerNote", @id = "txtTicketNotes", @style = "width:100%;", @rows = "4", @cols = "50" })
+                </div>
+            </div>
+        </div>
+        <div class="attorney-content-detail attach-document">
+            <ul>
+                <li class="mr-15">
+                    <div class="first width-210">
+                        <span>@Html.DisplayNameFor(x => x.Documents)</span>
+                    </div>
+                    <div class="details d-flex">
+                        <div class="upload-btn">
+                            @Html.TextBoxFor(x => x.Documents, new { type = "file", @name = "files", @class = "btn btn-info", accept = ".jpg,.png,.doc,.docx,.pdf,.xls,.xlsx,.mp4,.avi", @id = "FileUpload", title = "Select file" })
+                            <span id="spnFileTypesFormat" class="error text-danger" style="display:none;color:red;">Please upload only supported file format.</span>
+                            <span id="errorSize" class="error text-danger" style="display:none;color:red;">Maximum allowed file size is 25 MB.</span>
+                        </div>
+                        <div class="clear-btn">
+                            <button type="button" onclick="ClearFileUpload();" class="btn btn-primary" title="Clear"><i class="icon-cancel-square2"></i> Clear</button>
+                        </div>
+                        <div class="file-format">
+                            <span class="form-text text-muted">Supported file format - .jpg .png .doc .docx .pdf .xls .xlsx .mp4 .avi</span>
+                            <span class="form-text text-muted">
+                                Maximum file size for document is <code>25 Mb</code>
+                            </span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-12 text-right">
+                <button type="submit" onclick="ShowLoader();" class="btn btn-primary" title="Submit"><i class="icon-checkmark mr-2"></i> Submit</button>
+
+
+                <button type="button" onclick="RedirectToDashbaord();" class="btn bg-indigo-300" title="Back"><i class="icon-arrow-left7"></i> Back</button>
+
+            </div>
+        </div>
+
+    </div>
+
+}
+
+<script src="~/lib/jquery/jquery.js"></script>
+<script src="~/lib/jquery-validate/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>

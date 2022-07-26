@@ -1,0 +1,268 @@
+﻿@model FirstResponseApp.Areas.Ticket.Models.UserDto
+@{
+    ViewData["Title"] = "View User";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<script src="~/js/TicketUser/ViewUser.js"></script>
+<!-- Page header -->
+<div class="page-header page-header-light">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4> <span class="font-weight-semibold">View User</span></h4>
+            <a href="Dumy/index" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+        </div>
+    </div>
+</div>
+<!-- Page header -->
+<input type="hidden" name="hdnWebsitePath" id="hdnWebsitePath" value="@ViewBag.WebsitePath">
+<div class="content">
+    <div class="row">
+        <div class="col-12 text-right">
+
+            @if (Model.LoginOrganisationId == "1")
+            {
+                @*@Html.ActionLink("Edit Details", "EditUser", "TicketUser", new { id = @Model.Id }, new { @class = "btn btn-primary", @title = "Edit Details" })*@
+            <a class="btn btn-primary" href='@Url.Action("EditUser","TicketUser", new { id = @Model.Id })' title="Edit Details"><i class="icon-pencil"></i> Edit Details</a>
+            }
+            else
+            {
+                @*@Html.ActionLink("Edit Details", "MyProfile", "TicketUser", new { id = @Model.Id }, new { @class = "btn btn-primary", @title = "Edit Details" })*@
+        <a class="btn btn-primary" href='@Url.Action("MyProfile","TicketUser", new { id = @Model.Id })' title="Edit Details"><i class="icon-pencil"></i> Edit Details</a>
+            }
+            @if (Model.IsActive == true)
+            {
+                <a onclick="OpenConfirmActivePopup('@Model.Id')" class="nav-link btn btn-primary" href="#" name="Primary" title="Deactivate"><i class="icon-eye-blocked2"></i> Deactivate</a>
+            }
+            else
+            {
+                <a onclick="OpenConfirmDeactivePopup('@Model.Id')" class="nav-link btn btn-primary" href="#" name="Primary" title="Activate"><i class="icon-eye4"></i> Activate</a>
+            }
+            <a onclick="OpenResetPassword('@Model.Id')" class="nav-link btn bg-indigo-300" name="Primary" href="#" title="Reset Password">
+              <i class="fas fa-key"></i>  Change Password
+            </a>
+
+        </div>
+    </div>
+    <div class="m-b15">
+        <div class="name" style="display:none"><h2 class="date pb-3 mb-3">User ID --  @Model.Id</h2></div>
+        <div class="attorney-content-detail">
+            <ul>
+                <li class="mr-15">
+                    <div class="first">
+                        @*<i class="fa fa-envelope" aria-hidden="true"></i>*@
+                        <span>User Name</span>
+                    </div>
+                    <div class="details">
+                        @Model.UserName
+                    </div>
+                </li>
+            </ul>
+            </div>
+            <div class="attorney-content-detail">
+
+                <ul>
+                    <li class="mr-15">
+                        <div class="first">
+                            @*<i class="fa fa-envelope" aria-hidden="true"></i>*@
+                            <span>Name</span>
+                        </div>
+                        <div class="details">
+                            @Html.HiddenFor(m => m.Id)
+                            @Model.Name &nbsp; @Model.LastName
+                        </div>
+                    </li>
+                    <li class="mr-15">
+                        <div class="first">
+                            <span>Last Login</span>
+                        </div>
+                        <div class="details">
+                            @if (Model.LastLogOnDateTime != null)
+                        {
+                            @Model.LastLogOnDateTime.Value.ToString("dd/MM/yyyy hh:mm tt")
+                        }
+                        else {
+                            <span>NA</span>
+                        }
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="attorney-content-detail">
+                <ul>
+                    <li class="mr-15">
+                        <div class="first">
+                            @*<i class="fa fa-envelope" aria-hidden="true"></i>*@
+                            <span>Email ID</span>
+                        </div>
+                        <div class="details">
+                            @Model.EmailAddress
+                        </div>
+                    </li>
+                    <li class="mr-15">
+                        <div class="first">
+                            <span>Organization</span>
+                        </div>
+                        <div class="details">
+                            @Model.OrganisationName
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="attorney-content-detail">
+                <ul>
+                    <li class="mr-15">
+                        <div class="first">
+                            @*<i class="fa fa-envelope" aria-hidden="true"></i>*@
+                            <span>Added By</span>
+                        </div>
+                        <div class="details">
+                            @Model.CreatedBy
+                        </div>
+                    </li>
+                    <li class="mr-15">
+                        <div class="first">
+                            <span>Added On</span>
+                        </div>
+                        <div class="details">
+                            @Model.CreatedOnShow
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <div class="first">
+                    @*<i class="fa fa-envelope" aria-hidden="true"></i>*@
+                    <b><span>Notification Condition</span></b>
+                </div>
+            </div>
+            <div id="DivCheck" class="details col-9">
+                @if (Model.IsNotifyOnActive == true)
+                {
+                <div class="checkbox-list">
+                    <input type="checkbox" id="IsNotifyOnActive" name="IsNotifyOnActive" checked disabled> <label>Active/Open  (Receive notification when ticket has been posted)</label>
+                </div>
+                }
+                else
+                {
+                <div class="checkbox-list">
+                    <input type="checkbox" id="IsNotifyOnActive" name="IsNotifyOnActive" disabled>  <label>Active/Open  (Receive notification when ticket has been posted)</label>
+                </div>
+                }
+                @if (Model.IsNotifyOnUpdate == true)
+                {
+
+                <div class="checkbox-list">
+                    <input type="checkbox" id="IsNotifyOnActive" name="IsNotifyOnActive" checked disabled> <label>Update (Receive notification when ticket has been updated)</label>
+                </div>
+                }
+                else
+                {
+                <div class="checkbox-list">
+                    <input type="checkbox" id="IsNotifyOnActive" name="IsNotifyOnActive" disabled> <label>Update (Receive notification when ticket has been updated)</label>
+                </div>
+                }
+                @if (Model.IsNotifyOnClose == true)
+                {
+
+                <div class="checkbox-list">
+                    <input type="checkbox" id="IsNotifyOnClose" name="IsNotifyOnClose" checked disabled>  <label>Close  (Receive notification when ticket has been closed)</label>
+                </div>
+                }
+                else
+                {
+                <div class="checkbox-list">
+                    <input type="checkbox" id="IsNotifyOnClose" name="IsNotifyOnClose" disabled>  <label>Close  (Receive notification when ticket has been closed)</label>
+                </div>
+                }
+            </div>
+
+
+
+        </div>
+
+        <div class="row">
+            @*<div class="col-12 text-right"><button class="btn btn-danger"><i class="icon-arrow-left7">@Html.ActionLink("Back", "AllUser", "TicketUser",  new { @title = "Back" }, new { @style="color:white;" })</i></button>  </div>*@
+            <div class="col-12 text-right"><a class="btn bg-indigo-300" href='@Url.Action("AllUser","TicketUser",new { area = "Ticket" })' title="Back"><i class="icon-arrow-left7"></i> Back</a>  </div>
+        </div>
+
+    </div>
+
+<form id="frmDeactive" method="post" action="@Url.Action("DeactiveUser","TicketUser")">
+    <input id="url" name="url" type="hidden" value="ViewUser">
+    <div class="modal fade" id="DeativePopup">
+        <div class="modal-dialog modal-dialog-popup">
+            <div class="modal-content">
+                <div class="modal-header" id="ActiveHeader">
+
+                </div>
+                <div class="modal-body" id="ActiveBody">
+                </div>
+                @Html.HiddenFor(m => m.Id)
+                <div class="modal-footer">
+                    <button type="button" id="btnConfirmDeactive" title="Confirm" class="btn btn-primary">Confirm</button>
+                    <button type="button" class="btn btn-danger" title="Cancel" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<form id="frmResetPassword" method="post" action="@Url.Action("ResetPassword","TicketUser")">
+    <input id="url" name="url" type="hidden" value="ViewUser">
+    <div class="modal fade" id="ResetPasswordPopup">
+        <div class="modal-dialog modal-dialog-popup">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Confirm Reset Password
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to update the password of this user account?
+                </div>
+                @Html.HiddenFor(m => m.Id)
+
+            <div class="modal-footer" style="">
+                <button type="button" id="btnConfirmResetPassword" title="Confirm" class="btn btn-primary">Confirm</button>
+                <button type="button" class="btn btn-danger" title="Cancel" data-dismiss="modal">Cancel</button>
+            </div>
+
+            </div>
+        </div>
+
+    </div>
+</form>
+
+
+
+<div class="modal fade" id="divSuccessMessages">
+    <div class="modal-dialog modal-dialog-popup">
+        <div class="modal-content">
+            <div class="modal-header">
+                <b>Success</b>
+            </div>
+            <div class="modal-body">
+                <p>@ViewBag.Message</p>
+            </div>
+
+            <div class="modal-footer justify-content-center" style="">
+                <button type="button" class="btn btn-danger" titlt="Close" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.Success != null)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            $("#loaderContainer").css("display", "none");
+            $('#divSuccessMessages').modal('show');
+        };
+    </script>
+}
+
